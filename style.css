@@ -178,6 +178,11 @@ h3 {
     font-size: 1.5rem;
 }
 
+strong {
+    font-weight: bold;
+    color: #2c3e50;
+  }
+
 ul {
     list-style-position: inside;
     margin-left: 1rem;
