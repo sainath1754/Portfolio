@@ -1,161 +1,704 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>P.L.V.K.SAINATH - Data Professional Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>P.L.V.K. Sainath — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+  :root {
+    --bg: #080d1a;
+    --surface: #0f1729;
+    --surface2: #162035;
+    --teal: #00d4aa;
+    --teal-dim: rgba(0,212,170,0.12);
+    --amber: #f59e0b;
+    --text: #e2e8f0;
+    --muted: #8892a4;
+    --border: rgba(255,255,255,0.07);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--teal); border-radius: 2px; }
+
+  /* Grid overlay */
+  body::before {
+    content:'';
+    position:fixed;
+    inset:0;
+    background-image:
+      linear-gradient(rgba(0,212,170,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,170,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* Glow blob */
+  body::after {
+    content:'';
+    position:fixed;
+    top:-20%;
+    right:-10%;
+    width:600px;
+    height:600px;
+    background: radial-gradient(circle, rgba(0,212,170,0.06) 0%, transparent 70%);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; position:relative; z-index:1; }
+
+  /* NAV */
+  nav {
+    position: fixed; top:0; left:0; right:0;
+    z-index: 100;
+    padding: 1.2rem 0;
+    background: rgba(8,13,26,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner {
+    max-width: 1100px; margin:0 auto; padding:0 2rem;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .nav-logo {
+    font-family:'Syne',sans-serif;
+    font-weight:800; font-size:1.1rem;
+    color:var(--teal);
+    letter-spacing:0.08em;
+  }
+  .nav-logo span { color: var(--text); }
+  .nav-links { display:flex; gap:2.2rem; list-style:none; }
+  .nav-links a {
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.75rem; color:var(--muted);
+    text-decoration:none; letter-spacing:0.05em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color:var(--teal); }
+
+  /* HERO */
+  .hero {
+    min-height:100vh;
+    display:flex; align-items:center;
+    padding-top:80px;
+  }
+  .hero-content { max-width:720px; }
+  .hero-tag {
+    display:inline-flex; align-items:center; gap:0.5rem;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.75rem; color:var(--teal);
+    letter-spacing:0.12em;
+    background: var(--teal-dim);
+    border:1px solid rgba(0,212,170,0.25);
+    padding:0.35rem 0.9rem; border-radius:2px;
+    margin-bottom:2rem;
+  }
+  .hero-tag::before { content:'▶'; font-size:0.6rem; }
+  h1.hero-name {
+    font-family:'Syne',sans-serif;
+    font-size:clamp(2.8rem,6vw,5rem);
+    font-weight:800; line-height:1.0;
+    letter-spacing:-0.02em;
+    margin-bottom:0.5rem;
+  }
+  h1.hero-name .accent { color:var(--teal); }
+  .hero-title {
+    font-family:'Syne',sans-serif;
+    font-size:clamp(1rem,2.5vw,1.4rem);
+    font-weight:600; color:var(--muted);
+    margin-bottom:1.5rem;
+    letter-spacing:0.02em;
+  }
+  .hero-desc {
+    font-size:1rem; line-height:1.8; color:var(--muted);
+    max-width:580px; margin-bottom:2.5rem;
+  }
+  .hero-cta { display:flex; gap:1rem; flex-wrap:wrap; }
+  .btn {
+    display:inline-flex; align-items:center; gap:0.5rem;
+    padding:0.75rem 1.8rem;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.8rem; font-weight:500;
+    letter-spacing:0.06em;
+    border-radius:3px;
+    text-decoration:none;
+    transition: all 0.25s;
+    cursor:pointer; border:none;
+  }
+  .btn-primary {
+    background:var(--teal); color:#080d1a;
+  }
+  .btn-primary:hover { background:#00f0c0; transform:translateY(-2px); }
+  .btn-outline {
+    background:transparent; color:var(--teal);
+    border:1px solid rgba(0,212,170,0.4);
+  }
+  .btn-outline:hover { background:var(--teal-dim); transform:translateY(-2px); }
+
+  .hero-stats {
+    margin-top:3.5rem;
+    display:flex; gap:3rem; flex-wrap:wrap;
+    padding-top:2rem;
+    border-top:1px solid var(--border);
+  }
+  .stat-num {
+    font-family:'Syne',sans-serif;
+    font-size:2rem; font-weight:800; color:var(--teal);
+  }
+  .stat-label {
+    font-size:0.8rem; color:var(--muted);
+    letter-spacing:0.05em;
+    margin-top:0.15rem;
+  }
+
+  /* SECTIONS */
+  section { padding:6rem 0; }
+  .section-label {
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.7rem; color:var(--teal);
+    letter-spacing:0.15em; text-transform:uppercase;
+    margin-bottom:0.7rem;
+  }
+  h2.section-title {
+    font-family:'Syne',sans-serif;
+    font-size:clamp(1.8rem,3.5vw,2.8rem);
+    font-weight:800; letter-spacing:-0.02em;
+    margin-bottom:3rem;
+  }
+  h2.section-title .dim { color:var(--muted); }
+
+  /* ABOUT */
+  .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:start; }
+  .about-text { font-size:1rem; line-height:1.9; color:var(--muted); }
+  .about-text strong { color:var(--text); font-weight:500; }
+  .about-card {
+    background: var(--surface);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:2rem;
+  }
+  .about-card-row {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:0.9rem 0;
+    border-bottom:1px solid var(--border);
+    font-size:0.88rem;
+  }
+  .about-card-row:last-child { border-bottom:none; }
+  .about-card-row .key { color:var(--muted); font-family:'JetBrains Mono',monospace; font-size:0.75rem; }
+  .about-card-row .val { color:var(--text); font-weight:500; }
+
+  /* SKILLS */
+  .skills-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1.5rem; }
+  .skill-card {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:1.5rem;
+    transition: border-color 0.25s, transform 0.25s;
+    position:relative; overflow:hidden;
+  }
+  .skill-card::before {
+    content:'';
+    position:absolute; top:0; left:0; right:0; height:2px;
+    background: linear-gradient(90deg, var(--teal), transparent);
+    opacity:0; transition:opacity 0.25s;
+  }
+  .skill-card:hover { border-color:rgba(0,212,170,0.3); transform:translateY(-3px); }
+  .skill-card:hover::before { opacity:1; }
+  .skill-icon { font-size:1.5rem; margin-bottom:0.8rem; }
+  .skill-cat {
+    font-family:'Syne',sans-serif;
+    font-size:0.85rem; font-weight:700;
+    color:var(--teal); margin-bottom:0.5rem;
+    letter-spacing:0.04em;
+  }
+  .skill-desc { font-size:0.87rem; line-height:1.7; color:var(--muted); }
+
+  /* PROJECTS */
+  .projects-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1.8rem; }
+  .project-card {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:2rem;
+    display:flex; flex-direction:column;
+    transition: all 0.25s;
+    position:relative; overflow:hidden;
+  }
+  .project-card::after {
+    content:'';
+    position:absolute; bottom:0; left:0; right:0; height:3px;
+    background: linear-gradient(90deg, var(--teal), var(--amber));
+    transform:scaleX(0); transform-origin:left;
+    transition: transform 0.3s;
+  }
+  .project-card:hover { transform:translateY(-4px); border-color:rgba(0,212,170,0.25); }
+  .project-card:hover::after { transform:scaleX(1); }
+  .project-num {
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.7rem; color:var(--teal);
+    letter-spacing:0.1em; margin-bottom:1rem;
+  }
+  .project-title {
+    font-family:'Syne',sans-serif;
+    font-size:1.05rem; font-weight:700;
+    margin-bottom:1rem; line-height:1.3;
+  }
+  .project-desc { font-size:0.87rem; line-height:1.7; color:var(--muted); flex:1; }
+  .project-tags { display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:1.2rem; }
+  .tag {
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.68rem; padding:0.25rem 0.6rem;
+    background:var(--teal-dim); color:var(--teal);
+    border:1px solid rgba(0,212,170,0.2);
+    border-radius:2px; letter-spacing:0.04em;
+  }
+  .project-link {
+    display:inline-flex; align-items:center; gap:0.4rem;
+    margin-top:1.5rem; font-size:0.8rem;
+    color:var(--teal); text-decoration:none;
+    font-family:'JetBrains Mono',monospace;
+    letter-spacing:0.05em;
+    transition: gap 0.2s;
+  }
+  .project-link:hover { gap:0.7rem; }
+
+  /* CERTS */
+  .certs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1.2rem; }
+  .cert-card {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:1.5rem;
+    transition: all 0.25s;
+    text-decoration:none;
+    display:block;
+  }
+  .cert-card:hover { border-color:rgba(0,212,170,0.35); transform:translateY(-3px); background:var(--surface2); }
+  .cert-issuer {
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.68rem; color:var(--amber);
+    letter-spacing:0.1em; margin-bottom:0.7rem;
+    text-transform:uppercase;
+  }
+  .cert-name {
+    font-family:'Syne',sans-serif;
+    font-size:0.92rem; font-weight:700;
+    color:var(--text); line-height:1.35;
+    margin-bottom:0.8rem;
+  }
+  .cert-date {
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.7rem; color:var(--muted);
+  }
+  .cert-arrow {
+    float:right; color:var(--teal); font-size:0.9rem;
+    transition: transform 0.2s;
+  }
+  .cert-card:hover .cert-arrow { transform:translate(3px,-3px); }
+
+  /* EDUCATION */
+  .edu-timeline { display:flex; flex-direction:column; gap:0; }
+  .edu-item {
+    display:grid; grid-template-columns:140px 1fr;
+    gap:2rem; padding-bottom:2.5rem; position:relative;
+  }
+  .edu-item:last-child { padding-bottom:0; }
+  .edu-item::before {
+    content:'';
+    position:absolute; left:140px; top:8px; bottom:0;
+    width:1px; background:var(--border);
+  }
+  .edu-item:last-child::before { display:none; }
+  .edu-year {
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.75rem; color:var(--muted);
+    text-align:right; padding-top:4px;
+    letter-spacing:0.05em;
+  }
+  .edu-dot {
+    width:10px; height:10px; border-radius:50%;
+    background:var(--teal);
+    position:absolute; left:135px; top:5px;
+    box-shadow: 0 0 10px var(--teal);
+  }
+  .edu-body { padding-left:2rem; }
+  .edu-degree {
+    font-family:'Syne',sans-serif;
+    font-size:1rem; font-weight:700; margin-bottom:0.2rem;
+  }
+  .edu-school { font-size:0.88rem; color:var(--muted); margin-bottom:0.4rem; }
+  .edu-cgpa {
+    display:inline-block;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem; color:var(--teal);
+    background:var(--teal-dim);
+    border:1px solid rgba(0,212,170,0.2);
+    padding:0.2rem 0.6rem; border-radius:2px;
+  }
+
+  /* CODING */
+  .coding-box {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:2.5rem;
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:2rem;
+  }
+  .coding-stat { text-align:center; }
+  .coding-num {
+    font-family:'Syne',sans-serif;
+    font-size:2.5rem; font-weight:800; color:var(--teal);
+  }
+  .coding-label { font-size:0.8rem; color:var(--muted); margin-top:0.2rem; }
+  .coding-platforms { display:flex; gap:1rem; flex-wrap:wrap; }
+  .platform-link {
+    display:inline-flex; align-items:center; gap:0.4rem;
+    padding:0.6rem 1.2rem;
+    font-family:'JetBrains Mono',monospace; font-size:0.75rem;
+    color:var(--text); text-decoration:none;
+    background:var(--surface2); border:1px solid var(--border);
+    border-radius:3px; transition:all 0.2s;
+  }
+  .platform-link:hover { border-color:var(--teal); color:var(--teal); transform:translateY(-2px); }
+
+  /* CONTACT */
+  .contact-section { border-top:1px solid var(--border); }
+  .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
+  .contact-text { font-size:1rem; line-height:1.8; color:var(--muted); }
+  .contact-links { display:flex; flex-direction:column; gap:1rem; }
+  .contact-link {
+    display:flex; align-items:center; gap:1rem;
+    text-decoration:none; color:var(--text);
+    padding:1rem 1.2rem;
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:6px; transition:all 0.22s;
+    font-size:0.88rem;
+  }
+  .contact-link:hover { border-color:rgba(0,212,170,0.35); color:var(--teal); transform:translateX(4px); }
+  .contact-icon { font-size:1rem; width:20px; text-align:center; }
+
+  /* FOOTER */
+  footer {
+    text-align:center; padding:2.5rem;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem; color:var(--muted);
+    border-top:1px solid var(--border);
+  }
+  footer span { color:var(--teal); }
+
+  @media(max-width:768px){
+    .about-grid,.contact-grid { grid-template-columns:1fr; gap:2rem; }
+    .edu-item { grid-template-columns:80px 1fr; }
+    .edu-item::before { left:80px; }
+    .edu-dot { left:75px; }
+    nav .nav-links { display:none; }
+  }
+
+  .fade-in { animation: fadeUp 0.7s ease both; }
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(24px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  .delay-1 { animation-delay:0.15s; }
+  .delay-2 { animation-delay:0.3s; }
+  .delay-3 { animation-delay:0.45s; }
+  .delay-4 { animation-delay:0.6s; }
+</style>
 </head>
 <body>
-    <header>
-        <nav>
-            <input type="checkbox" id="nav-toggle" class="nav-toggle">
-            <label for="nav-toggle" class="nav-toggle-label">
-                <span></span>
-            </label>
-            <a href="#about" class="nav-logo">
-                <img src="https://res.cloudinary.com/ddos4ldfz/image/upload/v1722512143/pngtree-s-logo-icon-png-image_9171884_pnakwz.png" alt="P.L.V.K. SAINATH">
-            </a>
-            <div class="nav-name">P.L.V.K.SAINATH</div>
-            <ul class="nav-menu">
-                <li><a href="#about">About</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#education">Education</a></li>
-                <li><a href="#certifications">Certifications</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#internships">Internships</a></li>
-                <li><a href="#coding-profiles">Coding Profiles</a></li>
-            </ul>
-        </nav>
-    </header>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect } = React;
 
-    <main>
-        <section id="about">
-            <div class="about-content">
-                <div class="about-text">
-                    <h1>P.L.V.K.SAINATH</h1>
-                    <div class="contact-details">
-                        <p><a href="mailto:2100031440cseh@gmail.com">2100031440cseh@gmail.com</a> | <a href="https://linkedin.com/in/sainathpragada/" target="_blank">LinkedIn</a> | +91-8019789641</p>
-                    </div>
-                    <p class="about-description">Skilled data professional with expertise in machine learning, database management, automation, and Python programming. Applies technology to solve complex problems and enhance efficiency. Focuses on implementing academic knowledge for data-driven solutions and process optimization. Committed to continuous learning and staying updated with trends in data science and automation.</p>
-                </div>
-                <div class="about-image">
-                    <img src="https://res.cloudinary.com/ddos4ldfz/image/upload/v1697110897/photo_2023-10-12_17-09-52_ycbjqc.jpg" alt="P.L.V.K. SAINATH">
-                </div>
-            </div>
-            <div class="download-resume">
-                <a href="https://drive.google.com/file/d/1mrWad6xrP8DkS1Bt_0qq6IAsZDsNVkeQ/view?usp=sharing" download class="resume-link">Download Resume</a>
-            </div>
-        </section>
+const NAV = ["About","Skills","Projects","Certifications","Education","Contact"];
 
-        <section id="skills">
-            <h2>Technical Skills</h2>
-                <li><strong>Problem-Solving:</strong>Skilled Python developer with expertise in data structures and algorithms, specializing in creating efficient, scalable solutions for complex coding challenges.</li>
-                <br>
-                <li><strong>Cloud Expertise:</strong> Familiarity with popular cloud platforms like AWS Cloud.</li>
-                <br>
-                <li><strong>Databases:</strong> Proficient in SQL for database querying and possess basic knowledge of popular platforms like MySQL and PostgreSQL.</li>
-                <br>
-                <li><strong>Business Intelligence:</strong> Strong expertise in Power BI, including data modeling, data transformations using Power Query, and advanced data analysis using DAX.</li>
-                <br>
-                <li><strong>Robotic Process Automation (RPA):</strong> Knowledge of RPA principles and experience with Automation Anywhere platform for automating business processes.</li>
-                <br>
-                <li><strong>Prompt Engineering:</strong>  Proficient in crafting effective prompts for large language models, optimizing AI-generated
-                    content for accuracy, relevance, and desired outcomes.</li>
-            </ul>
+const SKILLS = [
+  { icon:"🐍", cat:"Programming Languages", desc:"Proficient in Python for data analysis, scripting, and machine learning workflows, and Core Java for object-oriented application development." },
+  { icon:"🗄️", cat:"Databases & Querying", desc:"Experienced in relational database design and querying using SQL, MySQL, and PostgreSQL with a focus on optimized schema design and data integrity." },
+  { icon:"☁️", cat:"Cloud Computing — AWS", desc:"Hands-on with EC2, Lambda, S3, EBS, RDS, DynamoDB, VPC, and SageMaker for scalable cloud-native infrastructure and ML deployment." },
+  { icon:"📊", cat:"Data Visualization", desc:"Skilled in building interactive BI dashboards using Power BI (DAX, Power Query) and Tableau for data-driven decision-making." },
+  { icon:"🤖", cat:"Machine Learning", desc:"Knowledgeable in core ML concepts including supervised learning, model evaluation, and end-to-end ML pipeline development." },
+  { icon:"⚙️", cat:"Frameworks & APIs", desc:"Familiar with backend development using Spring Boot and RESTful APIs, and distributed data processing with Apache Spark." },
+  { icon:"🔧", cat:"Engineering & Version Control", desc:"Follows SDLC best practices for structured development; proficient in collaborative workflows using Git and GitHub." },
+];
 
-        </section>
+const PROJECTS = [
+  {
+    num:"01",
+    title:"Sainadh Fertilizers & Pesticides — Agriculture E-Commerce",
+    desc:"Full-stack agriculture e-commerce web application using Spring Boot and RESTful APIs to digitally connect farmers with fertilizer and pesticide suppliers. Implements product catalog, user authentication, and order management following MVC architecture.",
+    tags:["Spring Boot","REST API","MySQL","MVC","SDLC"],
+    link:"https://github.com/sainath1754/Sainadh-Fertilizers-and-Pesticides",
+    status:"Ongoing"
+  },
+  {
+    num:"02",
+    title:"Interactive Sales Analytics Dashboard",
+    desc:"Multi-dimensional sales analytics dashboard using Power BI, DAX, and advanced data modeling to deliver strategic KPI insights across product categories and regions. Dynamic drilldowns and Power Query ETL pipelines.",
+    tags:["Power BI","DAX","Power Query","ETL","KPI Analytics"],
+    link:"https://github.com/sainath1754/FLIPMART-DASHBOARD",
+    status:"Completed"
+  },
+  {
+    num:"03",
+    title:"Netflix Data Analysis: Content Optimization",
+    desc:"Analyzed 8,000+ Netflix titles using Python (Pandas, NumPy, Matplotlib, Seaborn) to extract insights on genres, director trends, actor frequency, and movie durations. Delivered data-driven content strategy recommendations.",
+    tags:["Python","Pandas","NumPy","Seaborn","Statistical Analysis"],
+    link:"https://github.com/sainath1754/Netflix-DataAnalysis-using-python",
+    status:"Completed"
+  },
+];
 
-        <section id="education">
-            <h2>Education</h2>
-            <div class="education-item">
-                <h3>Koneru Lakshmaiah University, Vaddeswaram</h3>
-                <p>Bachelor of Technology, Computer Science & Engineering | CGPA: 9.3</p>
-                <p>2021 - 2025</p>
-            </div>
-            <div class="education-item">
-                <h3>Sasi Junior College, Velivennu</h3>
-                <p>Intermediate (BIEAP), MPC | Aggregate: 94.8%</p>
-                <p>2019 - 2021</p>
-            </div>
-            <div class="education-item">
-                <h3>Sasi English Medium High School, Velivennu</h3>
-                <p>Secondary School Certificate (BSEAP) | CGPA: 9.8</p>
-                <p>2018 - 2019</p>
-            </div>
-        </section>
+const CERTS = [
+  { issuer:"Amazon Web Services", name:"AWS Certified Cloud Practitioner", date:"Jul 2023", link:"https://www.credly.com/badges/e3dd52a2-4c8b-4352-975e-c74c1412911a/public_url" },
+  { issuer:"Google / TensorFlow", name:"TensorFlow Developer Certificate", date:"Apr 2024", link:"https://www.credential.net/64af981c-3ba5-461a-acb6-9425d63ef5c6" },
+  { issuer:"Oracle", name:"Oracle Data Platform Certified Foundations Associate", date:"Jul 2025", link:"https://catalog-education.oracle.com/pls/certview/sharebadge?id=E6646D8F96D3A741D9BF137D00DB2F4F288E7108229E0EB8CE581B197EAF982E" },
+  { issuer:"Oracle", name:"Oracle Cloud Infrastructure Certified Data Science Professional", date:"Aug 2025", link:"https://catalog-education.oracle.com/pls/certview/sharebadge?id=E6646D8F96D3A741D9BF137D00DB2F4F752D94664F738F6DBF783E6B45451442" },
+];
 
-        <section id="certifications">
-            <h2>Certifications</h2>
-            <ul>
-                <li><a href="https://www.credly.com/badges/e3dd52a2-4c8b-4352-975e-c74c1412911a/public_url" target="_blank">AWS Certified Cloud Practitioner</a> (Jul 2023)</li>
-                <li><a href="https://www.credly.com/badges/91a736f0-1126-4199-946e-04ec5667216c/public_url" target="_blank">RedHat Certified Enterprise Application Developer</a> (Aug 2023)</li>
-                <li><a href="https://catalog-education.oracle.com/pls/certview/sharebadge?id=09D7D563A1199FE618C6BAFB58FBAD224A5559793F14A5AE4721407BA26EDF9B" target="_blank">Oracle Cloud Infrastructure 2023 Certified Foundations Associate</a> (Aug 2023)</li>
-                <li><a href="https://catalog-education.oracle.com/pls/certview/sharebadge?id=BB4780ACBD2EBA9D7F6D605486CF97BD5A4C4C150DB4B27CB6C98AEC4C1CF076" target="_blank">Oracle Cloud Infrastructure 2023 Certified Architect Associate</a> (Aug 2023)</li>
-                <li><a href="https://catalog-education.oracle.com/pls/certview/sharebadge?id=23E60B33C5D01E119373B7F72447438B6F917BA7DAAC0411E18E3833A9DF6E2E" target="_blank">Oracle Cloud Data Management Foundations Associate</a> (Sep 2023)</li>
-                <li><a href="https://www.credential.net/64af981c-3ba5-461a-acb6-9425d63ef5c6?record_view=true#gs.cfehyt" target="_blank">TensorFlow Developer</a> (Apr 2024)</li>
-                <li><a href="https://certificates.automationanywhere.com/56aafbcd-a835-41c7-a55f-8155fe5d3a1e#gs.al2z34" target="_blank">Automation Anywhere Certified Essentials RPA Professional</a> (Jun 2024)</li>
-                <li><a href="https://catalog-education.oracle.com/pls/certview/sharebadge?id=D0A65278D229264C0899EDAC6EBC61A37EFF9BA6BC6CBF919FDCCB11034EFA93" target="_blank">Oracle Cloud Infrastructure 2023 AI Certified Foundations Associate</a> (Jul 2024)</li>
-                <li><a href="https://catalog-education.oracle.com/pls/certview/sharebadge?id=BB4780ACBD2EBA9D7F6D605486CF97BDDB58F49A088FD6E1600CFA9DFD65A9AE" target="_blank">Oracle Cloud Infrastructure 2024 Generative AI Certified Professional</a> (Jul 2024)</li>
-            </ul>
-        </section>
+const EDU = [
+  { year:"2025 – Present", degree:"M.Tech in Data Science", school:"SRM Institute of Science and Technology, Kattankulathur", cgpa:"8.67" },
+  { year:"2021 – 2025", degree:"B.Tech in Computer Science & Engineering", school:"Koneru Lakshmaiah University, Vaddeswaram", cgpa:"9.25" },
+];
 
-        <section id="projects">
-            <h2>Projects</h2>
-            <div class="project">
-                <h3><a href="https://github.com/sainath1754/FLIPMART-DASHBOARD" target="_blank">Interactive Sales Analytics Dashboard with Power BI</a></h3>
-                <ul>
-                    <li>Developed insightful dashboards using Power BI, DAX, and advanced data modeling</li>
-                    <li>Implemented multi-dimensional drilldowns and filters for strategic decision-making</li>
-                </ul>
-            </div>
+function App() {
+  const [active, setActive] = useState("");
+  useEffect(() => {
+    const onScroll = () => {
+      const sections = NAV.map(n => document.getElementById(n.toLowerCase()));
+      for (let s of sections.reverse()) {
+        if (s && window.scrollY >= s.offsetTop - 120) { setActive(s.id); break; }
+      }
+    };
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  },[]);
 
-            <div class="project">
-                <h3><a href="https://github.com/sainath1754/POWER-BI" target="_blank">Global Superstore Sales Performance Dashboard for 2021-2022</a></h3>
-                <ul>
-                    <li>Comprehensive sales distribution across products, regions, and customer segments visualized through multiple pie charts.</li>
-                    <li>Time-series financial metrics including items sold, revenue, and margins displayed in line and bar graphs for 2021-2022.</li>
-                </ul>
-            </div>
-            <div class="project">
-                <h3><a href="https://github.com/sainath1754/Netflix-DataAnalysis-using-python" target="_blank">Netflix Data Analysis: Strategic Insights for Content Optimization</a></h3>
-                <ul>
-                    <li>Leveraged Python libraries to analyze Netflix content data, extracting actionable insights on 
-                        actors, directors, genres, and movie durations.</li>
-                    <li> Developed data-driven content strategy recommendations for enhancing user engagement</li>
-                </ul>
-            </div>
-            <div class="project">
-                <h3><a href="https://github.com/sainath1754/Amazon-PowerBi-Dashboard" target="_blank">Amazon Prime Video Content Analysis Dashboard</a></h3>
-                <ul>
-                    <li>Visualizes Prime Video's entire library, revealing content trends and viewer preferences.</li>
-                    <li>Uncovers global distribution and growth patterns of Prime Video content since 1920.</li>
-                </ul>
-            </div>
-        </section>
+  return (
+    <>
+      <nav>
+        <div className="nav-inner">
+          <div className="nav-logo">SAINATH<span>.dev</span></div>
+          <ul className="nav-links">
+            {NAV.map(n => (
+              <li key={n}>
+                <a href={`#${n.toLowerCase()}`} style={active===n.toLowerCase()?{color:'var(--teal)'}:{}}>{n}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
 
-        <section id="internships">
-            <h2>Internships</h2>
-            <div class="internship">
-                <h3>AI-ML VIRTUAL INTERNSHIP (Dec 2022 - Feb 2023)</h3>
-            <li>Gained in-depth knowledge of AWS cloud architecture, including compute (EC2, Lambda), storage (S3, EBS),
-                database (RDS, DynamoDB), networking (VPC, Route 53), and ML services (SageMaker).</li>
-            </div>
-        </section>
-
-        <section id="coding-profiles">
-            <h2>Coding Profiles</h2>
-            <p>Solved 550+ Problems on: 
-                <a href="https://www.codechef.com/users/kl_2100031440" target="_blank">CodeChef</a>, 
-                <a href="https://www.hackerrank.com/profile/klu_2100031440" target="_blank">HackerRank</a>, 
-                <a href="https://leetcode.com/u/klu_2100031440/" target="_blank">LeetCode</a>.
+      {/* HERO */}
+      <section className="hero" id="hero">
+        <div className="container">
+          <div className="hero-content">
+            <div className="hero-tag fade-in">Data Science & Software Engineering</div>
+            <h1 className="hero-name fade-in delay-1">P.L.V.K.<br/><span className="accent">Sainath</span></h1>
+            <p className="hero-title fade-in delay-2">M.Tech Data Science · AWS Certified · Full-Stack Java</p>
+            <p className="hero-desc fade-in delay-3">
+              Results-driven data and software professional building intelligent, scalable systems at the intersection of machine learning, cloud computing, and full-stack development.
             </p>
-        </section>
-    </main>
+            <div className="hero-cta fade-in delay-4">
+              <a className="btn btn-primary" href="#projects">View Projects</a>
+              <a className="btn btn-outline" href="https://linkedin.com/in/sainathpragada/" target="_blank">LinkedIn ↗</a>
+              <a className="btn btn-outline" href="https://sainadhpragada.netlify.app/" target="_blank">Portfolio Site ↗</a>
+            </div>
+            <div className="hero-stats fade-in delay-4">
+              <div><div className="stat-num">9.25</div><div className="stat-label">B.Tech CGPA</div></div>
+              <div><div className="stat-num">350+</div><div className="stat-label">Problems Solved</div></div>
+              <div><div className="stat-num">4</div><div className="stat-label">Certifications</div></div>
+              <div><div className="stat-num">3</div><div className="stat-label">Projects</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-    <footer>
-        <p>&copy; 2024 P.L.V.K.SAINATH. All rights reserved.</p>
-    </footer>
+      {/* ABOUT */}
+      <section id="about">
+        <div className="container">
+          <div className="section-label">01 — Who I Am</div>
+          <h2 className="section-title">About <span className="dim">Me</span></h2>
+          <div className="about-grid">
+            <div className="about-text">
+              <p style={{marginBottom:"1.2rem"}}>
+                I'm a <strong>data and software professional</strong> currently pursuing M.Tech in Data Science at SRM Institute of Science and Technology. I combine a strong foundation in computer science with practical expertise in <strong>machine learning, cloud computing, and full-stack Java development</strong>.
+              </p>
+              <p style={{marginBottom:"1.2rem"}}>
+                I hold certifications from <strong>AWS, Google (TensorFlow), and Oracle</strong>, validating my hands-on cloud and ML capabilities. I'm passionate about solving real-world problems through automation, analytics, and intelligent systems.
+              </p>
+              <p>
+                Beyond academics, I actively sharpen my problem-solving skills with <strong>350+ challenges</strong> across LeetCode, HackerRank, and CodeChef — focusing on data structures and algorithms.
+              </p>
+            </div>
+            <div className="about-card">
+              {[
+                ["Status","Available for Opportunities"],
+                ["Degree","M.Tech Data Science"],
+                ["University","SRM IST, Kattankulathur"],
+                ["CGPA","8.67 (M.Tech) · 9.25 (B.Tech)"],
+                ["Location","Chennai, Tamil Nadu"],
+                ["Email","lp0997@srmist.edu.in"],
+              ].map(([k,v]) => (
+                <div className="about-card-row" key={k}>
+                  <span className="key">{k}</span>
+                  <span className="val">{v}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SKILLS */}
+      <section id="skills">
+        <div className="container">
+          <div className="section-label">02 — What I Know</div>
+          <h2 className="section-title">Technical <span className="dim">Skills</span></h2>
+          <div className="skills-grid">
+            {SKILLS.map(s => (
+              <div className="skill-card" key={s.cat}>
+                <div className="skill-icon">{s.icon}</div>
+                <div className="skill-cat">{s.cat}</div>
+                <div className="skill-desc">{s.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* PROJECTS */}
+      <section id="projects">
+        <div className="container">
+          <div className="section-label">03 — What I've Built</div>
+          <h2 className="section-title">Featured <span className="dim">Projects</span></h2>
+          <div className="projects-grid">
+            {PROJECTS.map(p => (
+              <div className="project-card" key={p.num}>
+                <div className="project-num">Project {p.num} · <span style={{color: p.status==="Ongoing"?"var(--amber)":"var(--teal)"}}>{p.status}</span></div>
+                <div className="project-title">{p.title}</div>
+                <div className="project-desc">{p.desc}</div>
+                <div className="project-tags">{p.tags.map(t => <span className="tag" key={t}>{t}</span>)}</div>
+                <a className="project-link" href={p.link} target="_blank">View on GitHub →</a>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CERTIFICATIONS */}
+      <section id="certifications">
+        <div className="container">
+          <div className="section-label">04 — Credentials</div>
+          <h2 className="section-title">Certifi<span className="dim">cations</span></h2>
+          <div className="certs-grid">
+            {CERTS.map(c => (
+              <a className="cert-card" href={c.link} target="_blank" key={c.name}>
+                <span className="cert-arrow">↗</span>
+                <div className="cert-issuer">{c.issuer}</div>
+                <div className="cert-name">{c.name}</div>
+                <div className="cert-date">{c.date}</div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* EDUCATION */}
+      <section id="education">
+        <div className="container">
+          <div className="section-label">05 — Background</div>
+          <h2 className="section-title">Edu<span className="dim">cation</span></h2>
+          <div className="edu-timeline">
+            {EDU.map(e => (
+              <div className="edu-item" key={e.degree}>
+                <div className="edu-year">{e.year}</div>
+                <div className="edu-dot"></div>
+                <div className="edu-body">
+                  <div className="edu-degree">{e.degree}</div>
+                  <div className="edu-school">{e.school}</div>
+                  <span className="edu-cgpa">CGPA: {e.cgpa}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{marginTop:"4rem"}}>
+            <div className="section-label" style={{marginBottom:"1.5rem"}}>Coding Profiles</div>
+            <div className="coding-box">
+              <div className="coding-stat">
+                <div className="coding-num">350+</div>
+                <div className="coding-label">Problems Solved</div>
+              </div>
+              <div className="coding-platforms">
+                {[
+                  {name:"LeetCode", url:"https://leetcode.com/u/klu_2100031440/"},
+                  {name:"HackerRank", url:"https://www.hackerrank.com/profile/klu_2100031440"},
+                  {name:"CodeChef", url:"https://www.codechef.com/users/kl_2100031440"},
+                ].map(p => (
+                  <a className="platform-link" href={p.url} target="_blank" key={p.name}>
+                    {"{ }"} {p.name}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CONTACT */}
+      <section id="contact" className="contact-section">
+        <div className="container">
+          <div className="section-label">06 — Get In Touch</div>
+          <h2 className="section-title">Let's <span className="dim">Connect</span></h2>
+          <div className="contact-grid">
+            <div className="contact-text">
+              <p style={{marginBottom:"1rem"}}>
+                I'm open to full-time roles, internships, and collaborative projects in data science, machine learning, cloud engineering, or full-stack Java development.
+              </p>
+              <p>Whether you have a role, a project, or just want to talk tech — my inbox is always open.</p>
+            </div>
+            <div className="contact-links">
+              {[
+                {icon:"✉", label:"lp0997@srmist.edu.in", href:"mailto:lp0997@srmist.edu.in"},
+                {icon:"💼", label:"linkedin.com/in/sainathpragada", href:"https://linkedin.com/in/sainathpragada/"},
+                {icon:"🐙", label:"github.com/sainath1754", href:"https://github.com/sainath1754"},
+                {icon:"🌐", label:"Portfolio Website", href:"https://sainadhpragada.netlify.app/"},
+              ].map(l => (
+                <a className="contact-link" href={l.href} target="_blank" key={l.label}>
+                  <span className="contact-icon">{l.icon}</span>
+                  <span>{l.label}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        Built by <span>P.L.V.K. Sainath</span> · {new Date().getFullYear()} · All rights reserved
+      </footer>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
 </body>
 </html>
