@@ -149,6 +149,36 @@
   }
   .btn-outline:hover { background:var(--teal-dim); transform:translateY(-2px); }
 
+  /* RESUME BUTTON — distinct amber/gold accent to stand out from teal siblings */
+  .btn-resume {
+    background: transparent;
+    color: var(--amber);
+    border: 1px solid rgba(245,158,11,0.45);
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-resume::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(245,158,11,0.08);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .btn-resume:hover::before { opacity: 1; }
+  .btn-resume:hover {
+    border-color: rgba(245,158,11,0.75);
+    color: #fbbf24;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 18px rgba(245,158,11,0.18);
+  }
+  /* Animated underline pulse on the resume icon */
+  .btn-resume .resume-icon {
+    display: inline-block;
+    transition: transform 0.22s;
+  }
+  .btn-resume:hover .resume-icon { transform: translateY(2px); }
+
   .hero-stats {
     margin-top:3.5rem;
     display:flex; gap:3rem; flex-wrap:wrap;
@@ -519,6 +549,14 @@ function App() {
               <a className="btn btn-primary" href="#projects">View Projects</a>
               <a className="btn btn-outline" href="https://linkedin.com/in/sainathpragada/" target="_blank">LinkedIn ↗</a>
               <a className="btn btn-outline" href="https://sainadhpragada.netlify.app/" target="_blank">Portfolio Site ↗</a>
+              <a
+                className="btn btn-resume"
+                href="https://drive.google.com/file/d/1hh_z3LIAc0dBypi03wklbp2THyuzLl_n/view?usp=drive_link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span className="resume-icon">⬇</span> Resume
+              </a>
             </div>
             <div className="hero-stats fade-in delay-4">
               <div><div className="stat-num">9.25</div><div className="stat-label">B.Tech CGPA</div></div>
